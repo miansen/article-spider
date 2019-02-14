@@ -32,68 +32,60 @@ class DataClean(object):
                     user_avatar = 'images/user/%s/%s.jpg' % (datetime.datetime.now().strftime('%Y/%m/%d'),int(round(time.time()*1000)))
 
                     # 文章头图
-                    if item[9] and item[9].startswith("http"):
-                        oSSCommand.upload(item[9],article_avatar) # 上传文章头图
+                    if item[6] and item[6].startswith("http"):
+                        oSSCommand.upload(item[6],article_avatar) # 上传文章头图
                         article_avatar = "https://static.tuzixinwen.com/%s" % (article_avatar)
                     else:
                         article_avatar = ''
 
                     # 用户头像
-                    if item[10] and item[10].startswith("http"):
-                        oSSCommand.upload(item[10],user_avatar) # 上传用户头像
+                    if item[7] and item[7].startswith("http"):
+                        oSSCommand.upload(item[7],user_avatar) # 上传用户头像
                         user_avatar = "https://static.tuzixinwen.com/%s" % (user_avatar)
                     else:
                         user_avatar = ''
 
                     # 标题
-                    if item[5]:
-                        title = item[5]
+                    if item[2]:
+                        title = item[2]
                     else:
                         title = ""
 
                     # 当is_crawler_content = 1并且正文不为空
-                    if item[12] == 1 and item[6]:
-                        content = self.contentClean(item[6],item[1])
+                    if item[9] == 1 and item[3]:
+                        content = self.contentClean(item[3],item[1])
                     else:
                         content = ""
 
                     # 摘录
-                    if item[7]:
-                        excerpt = item[7]
+                    if item[4]:
+                        excerpt = item[4]
                     else:
                         excerpt = ""
 
                     # 作者
-                    if item[8]:
-                        author = item[8]
+                    if item[5]:
+                        author = item[5]
                     else:
                         author = ""
 
                     # 文章原文链接
-                    if item[11]:
-                        article_url = item[11]
+                    if item[9]:
+                        article_url = item[9]
                     else:
                         article_url = ""
 
                     new_dict = {
-                        "channel_name": item[2],
-                        "theme_name": item[3],
-                        "site_name": item[4],
                         "title": title,
                         "content": content,
                         "excerpt": excerpt,
                         "author": author,
                         "article_avatar": article_avatar,
                         "article_url": article_url,
-                        "show_content": item[12],
+                        "show_content": item[9],
                         "create_date": datetime.datetime.now(),
                         "crawler_article_id": item[0],
-                        "username": author,
-                        "password": int(time.time()),
-                        "user_avatar": user_avatar,
-                        "user_url": "/user/%s" % (author),
-                        "theme_url": "/theme/%s" % (item[3]),
-                        "site_url": "/site/%s" % (item[4])
+                        "user_avatar": user_avatar
                     }
                     mySQLCommand.insertArticle(new_dict)
                     time.sleep(3)

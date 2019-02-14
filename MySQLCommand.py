@@ -237,7 +237,8 @@ class MySQLCommand(object):
                   "content," \
                   "excerpt," \
                   "author," \
-                  "avatar," \
+                  "article_avatar," \
+                  "user_avatar," \
                   "article_url," \
                   "show_content," \
                   "create_date," \
@@ -245,7 +246,7 @@ class MySQLCommand(object):
                   "VALUES " \
                   "(%s','%s','%s','%s','%s','%s','%s','%s',%s) " \
                   % (new_dict['title'], new_dict['content'], new_dict['excerpt'],
-                     new_dict['author'], new_dict['article_avatar'], new_dict['article_url'],
+                     new_dict['author'], new_dict['article_avatar'], new_dict['user_avatar'],new_dict['article_url'],
                      new_dict['show_content'], new_dict['create_date'], new_dict['crawler_article_id'])
             # 更新状态
             sql5 = "update crawler_article set state = '1' where crawler_article_id = %s" % (
