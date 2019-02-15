@@ -8,6 +8,12 @@
 
 支持将爬取的数据保存到数据库，并将图片上传到对象存储，替换原来的图片链接。
 
+## 思路图
+
+大体上思路是这样的
+
+![](https://raw.githubusercontent.com/miansen/miansen.github.io/master/assets/urlpool.jpg)
+
 ## 快速开始
 
 需求环境
@@ -34,7 +40,7 @@ python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirement
 
 4.修改配置文件application.cfg
 
-将你的数据库信息和oss信息添加上去
+将你的数据库信息和oss信息添加上去，阿里云OSS不是必须的，没有的话可以不用填。
 
 5.添加爬虫配置
 
