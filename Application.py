@@ -5,12 +5,15 @@
 
 from DataCrawler import *
 from DataClean import *
+import configparser
 
 dataCrawler = DataCrawler()
 dataClean = DataClean()
+conf = configparser.ConfigParser()
+conf.read('application.cfg',encoding="utf-8")
 
 while 1:
     dataCrawler.getHtmlUrl()
     dataCrawler.getArticle()
     dataClean.dataClean()
-    time.sleep(7200)
+    time.sleep(int(conf.get('app', 'intervalTime')))

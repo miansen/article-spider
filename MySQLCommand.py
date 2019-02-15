@@ -10,7 +10,7 @@ from Logger import *
 
 logger = Logger()
 conf = configparser.ConfigParser()
-conf.read('application.cfg')
+conf.read('application.cfg',encoding="utf-8")
 # 数据库操作
 class MySQLCommand(object):
     # 初始化
