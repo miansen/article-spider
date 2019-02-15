@@ -32,18 +32,18 @@ class DataClean(object):
                     user_avatar = 'images/user/%s/%s.jpg' % (datetime.datetime.now().strftime('%Y/%m/%d'),int(round(time.time()*1000)))
 
                     # 文章头图
-                    if item[6] and item[6].startswith("http"):
+                    if item[6] and item[6].startswith("http") and item[10] == 1:
                         oSSCommand.upload(item[6],article_avatar) # 上传文章头图
-                        article_avatar = "https://static.tuzixinwen.com/%s" % (article_avatar)
+                        article_avatar = "%s/%s" % (item[11],article_avatar)
                     else:
-                        article_avatar = ''
+                        article_avatar = item[6]
 
-                    # 用户头像
-                    if item[7] and item[7].startswith("http"):
+                    # 作者头像
+                    if item[7] and item[7].startswith("http") and item[10] == 1:
                         oSSCommand.upload(item[7],user_avatar) # 上传用户头像
-                        user_avatar = "https://static.tuzixinwen.com/%s" % (user_avatar)
+                        user_avatar = "%s/%s" % (item[11],user_avatar)
                     else:
-                        user_avatar = ''
+                        user_avatar = item[7]
 
                     # 标题
                     if item[2]:
@@ -52,8 +52,8 @@ class DataClean(object):
                         title = ""
 
                     # 当is_crawler_content = 1并且正文不为空
-                    if item[9] == 1 and item[3]:
-                        content = self.contentClean(item[3],item[1])
+                    if item[9] == 1 and item[3] and item[10] == 1:
+                        content = self.contentClean(item[3],item[12],item[13],item[14])
                     else:
                         content = ""
 
@@ -70,8 +70,8 @@ class DataClean(object):
                         author = ""
 
                     # 文章原文链接
-                    if item[9]:
-                        article_url = item[9]
+                    if item[8]:
+                        article_url = item[8]
                     else:
                         article_url = ""
 
@@ -94,7 +94,7 @@ class DataClean(object):
 
 
     # 清洗文章内容
-    def contentClean(self,content,html_id):
+    def contentClean(self,content,attr_selector,index_url,img_url):
         try:
             if content:
                 try:
@@ -102,22 +102,22 @@ class DataClean(object):
                     imgList = soup.select('img')
                     if len(imgList):
                         # 文章图片属性选择器
-                        attr = mySQLCommand.queryArticleAvatarImgAttrSelectorByHtmlId(html_id)
+                        # attr = mySQLCommand.queryArticleAvatarImgAttrSelectorByHtmlId(html_id)
                         for item in imgList:
                             # print(item['src'])
                             try:
-                                imgURL = item[attr[0]] # 图片URL
+                                imgURL = item[attr_selector] # 图片URL
                                 if imgURL :
                                     if imgURL.startswith("//"):
                                         imgURL = "http:"+imgURL
                                     elif not imgURL.startswith("http"):
-                                        imgURL = attr[1]+imgURL
+                                        imgURL = index_url+imgURL
                                 else:
                                     continue
                                 article_avatar = 'images/article/%s/%s.jpg' % (datetime.datetime.now().strftime('%Y/%m/%d'),int(round(time.time()*1000)))
-                                oSSCommand.upload(imgURL,article_avatar) # 上传文章头图
+                                oSSCommand.upload(imgURL,article_avatar) # 上传正文里的图片
                                 # 这里替换的还是'src'
-                                content = content.replace(item['src'],"https://static.tuzixinwen.com/%s" % (article_avatar)) # 替换图片链接
+                                content = content.replace(item['src'],"%s/%s" % (img_url,article_avatar)) # 替换图片链接
                             except KeyError:
                                 continue
                             time.sleep(3)

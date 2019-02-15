@@ -102,17 +102,23 @@ class MySQLCommand(object):
     def queryCrawlerArticle(self):
         try:
             sql = "select " \
-                  "crawler_article_id," \
-                  "html_id," \
-                  "title," \
-                  "content," \
-                  "excerpt," \
-                  "author," \
-                  "article_avatar," \
-                  "user_avatar," \
-                  "article_url," \
-                  "is_crawler_content " \
-                  "from crawler_article WHERE state = 0 ORDER BY RAND()"
+                  "a.crawler_article_id," \
+                  "a.html_id," \
+                  "a.title," \
+                  "a.content," \
+                  "a.excerpt," \
+                  "a.author," \
+                  "a.article_avatar," \
+                  "a.user_avatar," \
+                  "a.article_url," \
+                  "a.is_crawler_content," \
+                  "c.is_upload_img," \
+                  "c.img_url," \
+                  "c.article_avatar_img_attr_selector," \
+                  "c.index_url," \
+                  "c.img_url " \
+                  "from crawler_article a,crawler_html b,crawler_hub c " \
+                  "WHERE a.state = 0 and a.html_id = b.html_id and b.hub_id = c.hub_id"
             try:
                 self.cursor.execute(sql)
                 return self.cursor.fetchall()
@@ -194,7 +200,7 @@ class MySQLCommand(object):
                   "create_date," \
                   "is_crawler_content) " \
                   "VALUES " \
-                  "(%s,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" \
+                  "(%s,'%s','%s','%s','%s','%s','%s','%s','%s','%s',%s)" \
                   % (new_dict['html_id'],
                      new_dict['title'],
                      new_dict['author'],
@@ -209,7 +215,7 @@ class MySQLCommand(object):
 
             sql2 = "update crawler_html set state = '1' where html_id = %s" % (new_dict['html_id'])
             try:
-                logger.getDebugLog(sql)
+                # logger.getDebugLog(sql)
                 result = self.cursor.execute(sql)
                 self.conn.commit()
                 if result:
@@ -244,7 +250,7 @@ class MySQLCommand(object):
                   "create_date," \
                   "crawler_article_id) " \
                   "VALUES " \
-                  "(%s','%s','%s','%s','%s','%s','%s','%s',%s) " \
+                  "('%s','%s','%s','%s','%s','%s','%s',%s,'%s',%s) " \
                   % (new_dict['title'], new_dict['content'], new_dict['excerpt'],
                      new_dict['author'], new_dict['article_avatar'], new_dict['user_avatar'],new_dict['article_url'],
                      new_dict['show_content'], new_dict['create_date'], new_dict['crawler_article_id'])
@@ -252,6 +258,7 @@ class MySQLCommand(object):
             sql5 = "update crawler_article set state = '1' where crawler_article_id = %s" % (
             new_dict['crawler_article_id'])
             try:
+                # logger.getDebugLog(sql)
                 result = self.cursor.execute(sql)
                 self.conn.commit()
                 if result:

@@ -52,18 +52,20 @@ python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirement
 - content_selector（正文选择器）：.article-content-wrap
 - excerpt_selector（摘录选择器）：.mob-sub
 - is_crawler_content（是否爬取正文 0: 否 1: 是）：1
+- is_upload_img（是否上传图片 0: 否 1: 是）：1
+- img_url（OSS图片访问的URL）：https://article-spider.oss-cn-shenzhen.aliyuncs.com
 
 6.验证配置
 
 配置信息添加完之后，输入以下命令验证配置是否正确
 
 ```
-python VerifyConfiguration.py
+python VerifyConfiguration.py [hub_id]
 ```
 
 如图所示则说明配置正确
 
-![]()
+![](https://raw.githubusercontent.com/miansen/miansen.github.io/master/assets/f42d83f4-5be7-41bc-b325-3913ab7c43ae.gif)
 
 7.启动数据爬虫
 

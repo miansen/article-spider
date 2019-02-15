@@ -8,6 +8,7 @@ from urllib import request
 import chardet
 import time
 from MySQLCommand import *
+import sys
 
 # 连接数据库
 mySQLCommand = MySQLCommand()
@@ -24,7 +25,7 @@ class VerifyConfiguration(object):
     def verifyUrl(self,id):
         try:
             result = mySQLCommand.queryCrawlerHubById(id)
-            #print(result)
+            # print(result)
             req = request.Request(url=result[1], headers=headers)
             page = request.urlopen(req)  # 获取网页源代码
             if page:
@@ -83,7 +84,7 @@ class VerifyConfiguration(object):
                         if item[5]:
                             article_avatar = soup.select(item[5])
                             if len(article_avatar):
-                                article_avatar = soup.select(item[5])[0][item[16]]
+                                article_avatar = soup.select(item[5])[0][item[15]]
                                 if article_avatar.startswith("//"):
                                     article_avatar = "http:"+article_avatar
                                 elif not article_avatar.startswith("http"):
@@ -114,7 +115,7 @@ class VerifyConfiguration(object):
                         if item[7]:
                             user_avatar = soup.select(item[7])
                             if len(user_avatar):
-                                user_avatar = soup.select(item[7])[0][item[17]]
+                                user_avatar = soup.select(item[7])[0][item[16]]
                                 if user_avatar.startswith("//"):
                                     user_avatar = "http:"+user_avatar
                                 elif not user_avatar.startswith("http"):
@@ -153,8 +154,7 @@ class VerifyConfiguration(object):
                         logger.getErrorLog("摘录配置出错", e)
 
                     print("标题：",title,"\nURL：",url,"\n作者：",author,"\n头像：",
-                          user_avatar,"\n头图：",article_avatar,"\n正文（长度）：",content,
-                          "\n摘录：",excerpt,"\n频道：",item[10],"\n主题：",'' if item[11] is None else item[11],"\n站点：",'' if item[12] is None else item[12])
+                          user_avatar,"\n头图：",article_avatar,"\n正文（长度）：",len(content),"\n摘录：",excerpt)
                     print("-------------------------------------------------------------------------------------------------------")
                     page.close()
                     time.sleep(1)
@@ -163,6 +163,6 @@ class VerifyConfiguration(object):
 
 if __name__ == '__main__':
     verifyConfiguration = VerifyConfiguration()
-    result = verifyConfiguration.verifyUrl(76)
-    #print(result)
-    verifyConfiguration.verifySelector(result,76)
+    result = verifyConfiguration.verifyUrl(sys.argv[1])
+    # print(result)
+    verifyConfiguration.verifySelector(result,sys.argv[1])

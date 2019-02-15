@@ -182,10 +182,10 @@ class DataCrawler(object):
                         "excerpt": excerpt,
                         "article_avatar": article_avatar,
                         "user_avatar": user_avatar,
-                        "article_url": item[4],
+                        "article_url": item[1],
                         "state": "0",
                         "create_date": datetime.datetime.now(),
-                        "is_crawler_content": item[10]
+                        "is_crawler_content": item[7]
                     }
                     mySQLCommand.insertCrawlerArticle(new_dict)
                     page.close()
