@@ -46,21 +46,6 @@ python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirement
 
 把需要爬取的网站的数据添加到`crawler_hub`表里，各个字段都有注释。
 
-这里以虎嗅网为例
-
-- hub_url（要爬取数据的URL）: https://www.huxiu.com
-- index_url（网站首页URL）: https://www.huxiu.com
-- article_url_selector（文章URL选择器）：.mob-ctt .transition
-- title_selector（标题选择器）：.article-wrap .t-h1
-- article_avatar_img_selector（文章头图选择器）：.articleimg-box img
-- author_selector（作者名称选择器）：.article-wrap .author-name a
-- author_avatar_img_selector（作者头像选择器）：.author-face img
-- content_selector（正文选择器）：.article-content-wrap
-- excerpt_selector（摘录选择器）：.mob-sub
-- is_crawler_content（是否爬取正文 0: 否 1: 是）：1
-- is_upload_img（是否上传图片 0: 否 1: 是）：1
-- img_url（OSS图片访问的URL）：https://article-spider.oss-cn-shenzhen.aliyuncs.com
-
 6.验证配置
 
 配置信息添加完之后，输入以下命令验证配置是否正确
