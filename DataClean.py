@@ -55,7 +55,7 @@ class DataClean(object):
                     if item[9] == 1 and item[3] and item[10] == 1:
                         content = self.contentClean(item[3],item[12],item[13],item[14])
                     else:
-                        content = ""
+                        content = item[3]
 
                     # 摘录
                     if item[4]:
