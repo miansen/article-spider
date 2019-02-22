@@ -31,7 +31,7 @@ git clone https://github.com/miansen/article-spider.git
 2.安装依赖的模块
 
 ```
-python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+pip install -r requirements.txt
 ```
 
 3.新建数据库article_spider
