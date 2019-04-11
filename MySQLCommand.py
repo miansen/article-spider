@@ -31,16 +31,16 @@ class MySQLCommand(object):
             logger.getErrorLog('MySQLCommand-connectMysql-连接数据库失败,原因：%s' % (e))
 
     # 查询crawler_hub
-    def queryCrawlerHub(self):
+    def queryCrawlerHub(self,start):
         try:
-            sql = "select hub_id, hub_url, index_url, article_url_selector from crawler_hub where is_delete = 0"
+            sql = "select hub_id, hub_url, index_url, article_url_selector from crawler_hub where is_delete = 0 limit %s,1000" % start
             self.cursor.execute(sql)
             return self.cursor.fetchall()
         except pymysql.Error as e:
             logger.getErrorLog("MySQLCommand-queryCrawlerHub-数据库错误，原因%d: %s" % (e.args[0], e.args[1]))
 
     # 关联查询
-    def queryCrawlerHubAndCrawlerHtml(self):
+    def queryCrawlerHubAndCrawlerHtml(self,start):
         try:
             sql = "SELECT " \
                   "b.html_id," \
@@ -61,15 +61,14 @@ class MySQLCommand(object):
                   "a.hub_id = b.hub_id " \
                   "AND " \
                   "b.state = 0 " \
-                  "ORDER BY RAND()"
+                  "LIMIT %s,1000" % start
             self.cursor.execute(sql)
             return self.cursor.fetchall()
         except pymysql.Error as e:
             logger.getErrorLog("MySQLCommand-queryCrawlerHubAndCrawlerHtml-数据库错误，原因%d: %s" % (e.args[0], e.args[1]))
 
-
     # 根据ID关联查询
-    def queryCrawlerHubAndCrawlerHtmlById(self,id):
+    def queryCrawlerHubAndCrawlerHtmlById(self,id,start):
         try:
             sql = "SELECT " \
                   "b.html_id," \
@@ -92,14 +91,14 @@ class MySQLCommand(object):
                   "WHERE " \
                   "a.hub_id = b.hub_id " \
                   "AND b.state = 0 " \
-                  "AND b.hub_id = %s" % id
+                  "AND b.hub_id = %s limit %s,1000" % id,start
             self.cursor.execute(sql)
             return self.cursor.fetchall()
         except pymysql.Error as e:
             logger.getErrorLog("MySQLCommand-queryCrawlerHubAndCrawlerHtmlById-数据库错误，原因%d: %s" % (e.args[0], e.args[1]))
 
     # 查询crawler_article
-    def queryCrawlerArticle(self):
+    def queryCrawlerArticle(self,start):
         try:
             sql = "select " \
                   "a.crawler_article_id," \
@@ -118,7 +117,7 @@ class MySQLCommand(object):
                   "c.index_url," \
                   "c.img_url " \
                   "from crawler_article a,crawler_html b,crawler_hub c " \
-                  "WHERE a.state = 0 and a.html_id = b.html_id and b.hub_id = c.hub_id"
+                  "WHERE a.state = 0 and a.html_id = b.html_id and b.hub_id = c.hub_id limit %s,1000" % start
             try:
                 self.cursor.execute(sql)
                 return self.cursor.fetchall()
@@ -355,6 +354,10 @@ if __name__ == '__main__':
     # print(item)
     # result = mySQLCommand.queryCrawlerArticleById(163)
     # print(result)
-    result = mySQLCommand.queryArticleAvatarImgAttrSelectorByHtmlId(8378)[0]
-    print(result)
-    mySQLCommand.closeMysql()
+    # result = mySQLCommand.queryArticleAvatarImgAttrSelectorByHtmlId(8378)[0]
+    # print(result)
+    # mySQLCommand.closeMysql()
+
+    count = mySQLCommand.countCrawlerHub()
+    print(count)
+    print(count[0])
